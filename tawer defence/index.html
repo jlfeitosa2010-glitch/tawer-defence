@@ -2,18 +2,68 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>🏰 Tower Defense - Ultimate Edition</title>
+    <title>🏰 Tower Defense Ultimate</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="gameWrapper">
+    <!-- TELA DE BEM-VINDO -->
+    <div id="welcomeScreen" class="screen">
+        <div class="welcome-box">
+            <h1>🏰 Tower Defense</h1>
+            <h2>Ultimate Edition</h2>
+            <div class="welcome-input">
+                <label>👤 Seu nome:</label>
+                <input type="text" id="usernameInput" placeholder="Digite seu nome..." maxlength="20">
+            </div>
+            <div class="difficulty-select">
+                <h3>⚔️ Escolha a Dificuldade:</h3>
+                <button class="diff-btn" data-diff="easy">
+                    <span class="diff-icon">🌱</span>
+                    <span class="diff-name">Fácil</span>
+                    <span class="diff-desc">30 vidas | +50% ouro | Inimigos fracos</span>
+                </button>
+                <button class="diff-btn" data-diff="normal">
+                    <span class="diff-icon">⚔️</span>
+                    <span class="diff-name">Normal</span>
+                    <span class="diff-desc">20 vidas | Ouro padrão | Balanceado</span>
+                </button>
+                <button class="diff-btn" data-diff="hard">
+                    <span class="diff-icon">🔥</span>
+                    <span class="diff-name">Difícil</span>
+                    <span class="diff-desc">15 vidas | -30% ouro | Inimigos fortes</span>
+                </button>
+                <button class="diff-btn" data-diff="nightmare">
+                    <span class="diff-icon">💀</span>
+                    <span class="diff-name">Pesadelo</span>
+                    <span class="diff-desc">10 vidas | -50% ouro | Extremo</span>
+                </button>
+            </div>
+            <button id="startBtn" disabled>🎮 Começar Jogo</button>
+            <div id="savedProfile" class="hidden">
+                <p>💾 Perfil encontrado: <strong id="savedName"></strong></p>
+                <button id="continueBtn">▶️ Continuar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JOGO -->
+    <div id="gameWrapper" class="hidden">
         <canvas id="gameCanvas" width="800" height="600"></canvas>
         <div id="sidebar">
+            <div class="profile-bar">
+                <div class="profile-avatar">👤</div>
+                <div class="profile-info">
+                    <div id="displayName">Player</div>
+                    <div class="profile-coins">🪙 <span id="coins">0</span></div>
+                </div>
+                <div class="diff-badge" id="diffBadge">⚔️ Normal</div>
+            </div>
+
             <h1 id="title">🏰 Tower Defense</h1>
             <div id="levelBadge">🗺️ Nível 1 - Floresta</div>
             <div id="bossAlert" class="hidden">👹 BOSS CHEGANDO!</div>
             <div id="comboDisplay" class="hidden">🔥 COMBO x<span id="comboCount">0</span></div>
-            
+
             <div class="stats-grid">
                 <div class="stat">💰 <span id="gold">200</span></div>
                 <div class="stat">❤️ <span id="lives">20</span></div>
@@ -22,7 +72,7 @@
                 <div class="stat">⭐ Nv <span id="playerLevel">1</span></div>
                 <div class="stat">✨ <span id="xp">0</span>/<span id="xpMax">100</span></div>
             </div>
-            
+
             <div class="speed-controls">
                 <button class="speed-btn" data-speed="0">⏸️</button>
                 <button class="speed-btn active" data-speed="1">1x</button>
@@ -30,26 +80,31 @@
                 <button class="speed-btn" data-speed="3">3x</button>
                 <button id="autoWaveBtn" title="Auto-wave">🔄</button>
             </div>
-            
-            <h2>⚔️ Torres</h2>
+
+            <h2>⚔️ Heróis</h2>
             <div id="towerButtons"></div>
-            
+
+            <div id="skinSelector" class="hidden">
+                <h3>🎨 Escolha a Skin</h3>
+                <div id="skinOptions"></div>
+            </div>
+
             <h2>💣 Armadilhas</h2>
             <div id="trapButtons"></div>
-            
+
             <h2>✨ Habilidades</h2>
             <div class="skills-row">
                 <button class="skill-btn" data-skill="meteor" title="Meteor (50g)">☄️</button>
-                <button class="skill-btn" data-skill="heal" title="Cura +5 ❤️ (80g)">💚</button>
+                <button class="skill-btn" data-skill="heal" title="Cura +5❤️ (80g)">💚</button>
                 <button class="skill-btn" data-skill="freeze" title="Congelar (60g)">❄️</button>
-                <button class="skill-btn" data-skill="gold" title="Chuva de Ouro (100g)">💰</button>
+                <button class="skill-btn" data-skill="gold" title="Ouro (100g)">💰</button>
             </div>
-            
+
             <div id="towerInfo" class="hidden">
-                <h2>Torre Selecionada</h2>
+                <h2>Herói Selecionado</h2>
                 <div id="towerStats"></div>
                 <div class="target-mode">
-                    <small>Modo:</small>
+                    <small>Modo de ataque:</small>
                     <select id="targetMode">
                         <option value="first">🥇 Primeiro</option>
                         <option value="last">🏁 Último</option>
@@ -63,16 +118,19 @@
                     <button id="sellBtn">💸 Vender</button>
                 </div>
             </div>
-            
+
             <button id="nextWaveBtn">▶️ Próxima Wave</button>
             <button id="cancelBtn">❌ Cancelar</button>
-            <button id="statsBtn">📊 Estatísticas</button>
-            <button id="resetBtn">🔄 Resetar</button>
-            
-            <div id="message">🏰 Bem-vindo ao Ultimate Edition!</div>
+            <div class="bottom-buttons">
+                <button id="statsBtn">📊 Stats</button>
+                <button id="resetBtn">🔄 Reset</button>
+            </div>
+
+            <div id="message">🦸 Bem-vindo!</div>
         </div>
     </div>
-    
+
+    <!-- MODAIS -->
     <div id="statsModal" class="modal hidden">
         <div class="modal-content">
             <h2>📊 Estatísticas</h2>
@@ -80,7 +138,7 @@
             <button id="closeStats">Fechar</button>
         </div>
     </div>
-    
+
     <div id="levelUpModal" class="modal hidden">
         <div class="modal-content">
             <h2>⭐ LEVEL UP!</h2>
@@ -88,7 +146,26 @@
             <div id="talentChoices"></div>
         </div>
     </div>
-    
+
+    <div id="gameOverModal" class="modal hidden">
+        <div class="modal-content">
+            <h2>💀 GAME OVER</h2>
+            <div id="gameOverStats"></div>
+            <div class="game-over-reward">🪙 +<span id="goReward">0</span> moedas!</div>
+            <button id="restartBtn">🔄 Jogar Novamente</button>
+        </div>
+    </div>
+
+    <div id="victoryModal" class="modal hidden">
+        <div class="modal-content">
+            <h2>🏆 VITÓRIA!</h2>
+            <div id="victoryStats"></div>
+            <div class="game-over-reward">🪙 +<span id="vicReward">0</span> moedas!</div>
+            <button id="continuePlayBtn">▶️ Continuar (Modo Infinito)</button>
+            <button id="vicRestartBtn">🔄 Novo Jogo</button>
+        </div>
+    </div>
+
     <script src="script.js"></script>
 </body>
 </html>
