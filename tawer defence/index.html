@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>🏰 Tower Defense - Ultimate Edition</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="gameWrapper">
+        <canvas id="gameCanvas" width="800" height="600"></canvas>
+        <div id="sidebar">
+            <h1 id="title">🏰 Tower Defense</h1>
+            <div id="levelBadge">🗺️ Nível 1 - Floresta</div>
+            <div id="bossAlert" class="hidden">👹 BOSS CHEGANDO!</div>
+            <div id="comboDisplay" class="hidden">🔥 COMBO x<span id="comboCount">0</span></div>
+            
+            <div class="stats-grid">
+                <div class="stat">💰 <span id="gold">200</span></div>
+                <div class="stat">❤️ <span id="lives">20</span></div>
+                <div class="stat">🌊 <span id="wave">0</span>/15</div>
+                <div class="stat">🏗️ <span id="towerCount">0</span>/<span id="towerMax">20</span></div>
+                <div class="stat">⭐ Nv <span id="playerLevel">1</span></div>
+                <div class="stat">✨ <span id="xp">0</span>/<span id="xpMax">100</span></div>
+            </div>
+            
+            <div class="speed-controls">
+                <button class="speed-btn" data-speed="0">⏸️</button>
+                <button class="speed-btn active" data-speed="1">1x</button>
+                <button class="speed-btn" data-speed="2">2x</button>
+                <button class="speed-btn" data-speed="3">3x</button>
+                <button id="autoWaveBtn" title="Auto-wave">🔄</button>
+            </div>
+            
+            <h2>⚔️ Torres</h2>
+            <div id="towerButtons"></div>
+            
+            <h2>💣 Armadilhas</h2>
+            <div id="trapButtons"></div>
+            
+            <h2>✨ Habilidades</h2>
+            <div class="skills-row">
+                <button class="skill-btn" data-skill="meteor" title="Meteor (50g)">☄️</button>
+                <button class="skill-btn" data-skill="heal" title="Cura +5 ❤️ (80g)">💚</button>
+                <button class="skill-btn" data-skill="freeze" title="Congelar (60g)">❄️</button>
+                <button class="skill-btn" data-skill="gold" title="Chuva de Ouro (100g)">💰</button>
+            </div>
+            
+            <div id="towerInfo" class="hidden">
+                <h2>Torre Selecionada</h2>
+                <div id="towerStats"></div>
+                <div class="target-mode">
+                    <small>Modo:</small>
+                    <select id="targetMode">
+                        <option value="first">🥇 Primeiro</option>
+                        <option value="last">🏁 Último</option>
+                        <option value="strong">💪 Mais Forte</option>
+                        <option value="weak">🎯 Mais Fraco</option>
+                        <option value="close">📍 Mais Próximo</option>
+                    </select>
+                </div>
+                <div class="action-buttons">
+                    <button id="upgradeBtn">⬆️ Aprimorar</button>
+                    <button id="sellBtn">💸 Vender</button>
+                </div>
+            </div>
+            
+            <button id="nextWaveBtn">▶️ Próxima Wave</button>
+            <button id="cancelBtn">❌ Cancelar</button>
+            <button id="statsBtn">📊 Estatísticas</button>
+            <button id="resetBtn">🔄 Resetar</button>
+            
+            <div id="message">🏰 Bem-vindo ao Ultimate Edition!</div>
+        </div>
+    </div>
+    
+    <div id="statsModal" class="modal hidden">
+        <div class="modal-content">
+            <h2>📊 Estatísticas</h2>
+            <div id="statsContent"></div>
+            <button id="closeStats">Fechar</button>
+        </div>
+    </div>
+    
+    <div id="levelUpModal" class="modal hidden">
+        <div class="modal-content">
+            <h2>⭐ LEVEL UP!</h2>
+            <p id="levelUpText"></p>
+            <div id="talentChoices"></div>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
